@@ -17,7 +17,7 @@ use plato\libs\FormBulider;
  */
 class HashScene extends AbstractScene
 {
-    public function udfPropertys()
+    public function udfProperties()
     {
         return ['conf', 'data'];
     }

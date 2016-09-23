@@ -10,21 +10,21 @@ namespace plato\service;
  */
 class Property
 {
-    protected $propertys;
+    protected $properties;
 
     public function __set($property, $value)
     {
-        $this->propertys[$property] = $value;
+        $this->properties[$property] = $value;
     }
 
     public function __get($property)
     {
-        return $this->propertys[$property];;
+        return $this->properties[$property];;
     }
 
-    public function getProperty($property)
+    public function getProperties($property)
     {
-        return $this->propertys[$property];
+        return $this->properties[$property];
     }
 
 }

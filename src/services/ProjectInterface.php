@@ -8,13 +8,11 @@ interface ProjectInterface
 
     public function path();
 
-    public function exist();
-
     public function create($type);
 
     public function remove();
 
     public function listScenes($containRoot = true);
 
-    public function treeScene();
+    public function treeScenes();
 }

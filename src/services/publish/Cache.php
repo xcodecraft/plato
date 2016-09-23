@@ -8,7 +8,7 @@ use Redis;
 /**
  * Class Cache
  * @package plato\service
- * 哈希缓存数据
+ * 缓存数据 kv结构； redis string 类型
  */
 class Cache
 {
@@ -40,7 +40,7 @@ class Cache
         return unserialize(Cache::getRedis()->get($key));
     }
 
-    public static function del($key)
+    public static function clear($key)
     {
         return Cache::getRedis()->del($key);
     }

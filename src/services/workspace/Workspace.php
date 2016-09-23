@@ -34,5 +34,4 @@ class Workspace implements WorkspaceInterface
             ];
         }, $dirs);
     }
-
 }

@@ -3,6 +3,7 @@
 use \plato\service\Project;
 use \plato\service\ProjectType;
 use \plato\service\AbstractScene;
+use plato\service\SceneFactory;
 use \plato\service\SceneManage;
 
 //@REST_RULE: /v2/scene/$method
@@ -19,7 +20,7 @@ class SceneREST extends XRuleService implements XService
         }
         $project = new Project($pname);
 
-        return SceneManage::load($project, $sname, $project->type());
+        return SceneFactory::load($project, $sname, $project->type());
     }
 
     /**
@@ -83,7 +84,7 @@ class SceneREST extends XRuleService implements XService
     {
         $project = $this->loadProject($_GET['project']);
         $response->success([
-            'tree'     => $project->treeScene(),
+            'tree'     => $project->treeScenes(),
             'typeName' => ProjectType::name($project->type()),
         ]);
     }

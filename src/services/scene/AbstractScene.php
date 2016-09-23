@@ -8,7 +8,7 @@ use Exception;
  * Class AbstractScene
  * @package plato\service
  *
- * 场景的抽象类，udfPropertys 定义不同数据类型的属性；
+ * 场景的抽象类，udfProperties 定义不同数据类型的属性；
  * 支持俩种场景目前，@see HashScene ,SetsScene
  *
  * @property Project $project
@@ -31,7 +31,7 @@ abstract class AbstractScene extends Property implements SceneInterface
     /**
      * 自定义属性，这些属性会自动保存到本地
      */
-    abstract public function udfPropertys();
+    abstract public function udfProperties();
 
     /**
      * 设置属性之前的的过滤方法
@@ -99,10 +99,10 @@ abstract class AbstractScene extends Property implements SceneInterface
         if (!file_exists($this->path())) {
             throw new \Exception('请创建该场景，use SceneManage::crete');
         }
-        foreach ($this->udfPropertys() as $property) {
-            if ($this->getProperty($property)) {
+        foreach ($this->udfProperties() as $property) {
+            if ($this->getProperties($property)) {
                 FileHelper::write($this->path() . '/' . PlatoHelper::filename($property),
-                    $this->getProperty($property));
+                    $this->getProperties($property));
             }
         }
     }
@@ -113,7 +113,7 @@ abstract class AbstractScene extends Property implements SceneInterface
      */
     public function wakeup()
     {
-        foreach ($this->udfPropertys() as $property) {
+        foreach ($this->udfProperties() as $property) {
             $propertyPath = $this->path() . '/' . PlatoHelper::filename($property);
             if (file_exists($propertyPath)) {
                 $this->$property = file_get_contents($propertyPath);
@@ -132,7 +132,7 @@ abstract class AbstractScene extends Property implements SceneInterface
         }
         $sname = static::parentSceneName($sname);
 
-        return SceneManage::load($this->project, $sname, $this->project->type());
+        return SceneFactory::load($this->project, $sname, $this->project->type());
     }
 
     public static function parentSceneName($scene)

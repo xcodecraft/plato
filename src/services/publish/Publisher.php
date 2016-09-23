@@ -14,12 +14,12 @@ class Publisher
     /**
      * @var GitRepo
      */
-    private $GitRepo;
+    private $gitRepo;
 
-    function __construct($projectName)
+    public function __construct($projectName)
     {
         $this->project = new Project($projectName);
-        $this->GitRepo = new GitRepo($this->project->path());;
+        $this->gitRepo = new GitRepo($this->project->path());;
     }
 
     public function publish()
@@ -33,15 +33,15 @@ class Publisher
     {
         $lists = $this->project->listScenes();
         foreach ($lists as $scene) {
-            $sceneName = ltrim($scene, '/' . $this->project->name());
-            $scene     = SceneManage::load($this->project, $sceneName, $this->project->type());
+            $sname = ltrim($scene, '/' . $this->project->name());
+            $scene = SceneFactory::load($this->project, $sname, $this->project->type());
             Cache::set($scene->alias(), json_decode($scene->rtProperty('data'), true));
         }
     }
 
     public function rollback($version)
     {
-        $repo = $this->GitRepo;
+        $repo = $this->gitRepo;
         $ret  = $repo->checkout($version);
         $this->flush();
 
@@ -50,7 +50,7 @@ class Publisher
 
     public function commit($comment = 'update auto commit')
     {
-        $repo     = $this->GitRepo;
+        $repo     = $this->gitRepo;
         $status   = $repo->status();
         $isChange = !strpos($status, "nothing to commit (working directory clean)");
         if ($isChange) {

@@ -67,8 +67,8 @@ class Project implements ProjectInterface
     {
         foreach ($this->listScenes() as $sname) {
             $sname = ltrim($sname, '/' . $this->name());
-            $scene = SceneManage::load($this, $sname, $this->type());
-            Cache::del($scene->alias());
+            $scene = SceneFactory::load($this, $sname, $this->type());
+            Cache::clear($scene->alias());
         }
     }
 
@@ -121,7 +121,7 @@ class Project implements ProjectInterface
         return $this->childrens;
     }
 
-    public function treeScene()
+    public function treeScenes()
     {
         $data = $this->listScenes(true);
         $ret  = [];
@@ -180,7 +180,7 @@ class Project implements ProjectInterface
         foreach ($lists as $scene) {
             $sceneName = ltrim($scene, '/' . $this->name());
 
-            $scene = SceneManage::load($this, $sceneName, $this->type());
+            $scene = SceneFactory::load($this, $sceneName, $this->type());
             array_push($ret, [
                 'alias' => $scene->alias(),
                 'scene' => $sceneName,

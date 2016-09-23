@@ -49,7 +49,7 @@ class SceneManage
             throw new Exception('存在子节点，禁止删除' . $this->scene->name());
         }
 
-        foreach ($this->scene->udfPropertys() as $property) {
+        foreach ($this->scene->udfProperties() as $property) {
             $file = $this->scene->path() . '/' . PlatoHelper::filename($property);
             if (file_exists($file)) {
                 FileHelper::unlink($file);
@@ -59,16 +59,4 @@ class SceneManage
         return FileHelper::rmdir($this->scene->path());
     }
 
-    public static function load(Project $Project, $scene, $type)
-    {
-        switch ($type) {
-
-            case ProjectType::HASH:
-                return new HashScene($Project, $scene);
-                break;
-            case ProjectType::SETS:
-                return new SetsScene($Project, $scene);
-                break;
-        }
-    }
 }
