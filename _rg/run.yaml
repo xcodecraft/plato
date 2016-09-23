@@ -1,0 +1,115 @@
+_env:
+    - !R.env
+        _name : "define"
+        _res  :
+            - !R.vars
+                PRJ_NAME : "plato"
+            - !R.include
+                _path :
+                    - "/data/x/tools/env_setting/env/ayb.yaml"
+
+    - !R.env
+            _name : "_local_deploy"
+            _res  :
+                - !R.vars
+                    PHP_ERROR    : "E_ALL & ~E_NOTICE"
+                    SDK_PATH     : "${HOME}/devspace/platform_sdks/src/plato"
+                    PLATFORM_SDK : "${HOME}/devspace/platform_sdks/src/"
+    - !R.env
+        _name : "_safe_deploy"
+        _res  :
+            - !R.vars
+                SDK_PATH     : "/data/x/sdks/platform_sdks/plato"
+                PLATFORM_SDK : "/data/x/sdks/platform_sdks/"
+
+    - !R.env
+        _name : "base"
+        _res :
+            - !R.vars
+                PORT           : "80"
+                INCLUDE_PATH   : "${PRJ_ROOT}/src/"
+                BASE_INCLUDE   : "${PRJ_ROOT}/src"
+
+
+    - !R.env
+        _name    : "dev"
+        _mix     : "define,_local_deploy,_dev,_base,base,speed_min,debug"
+        _res :
+            - !R.vars
+                BASE_DOMAIN     : "plato.${USER}.dev.ayibang.cn"
+                WORKSPACE       : "/data/${USER}/plato/work_space"
+                RECYCLE_SPACE   : "/data/${USER}/plato/recycle_space"
+                GIT_BIN         : "/usr/local/bin/git"
+
+    - !R.env
+        _name    : "lab"
+        _mix     : "define,_safe2_deploy,_lab,_base,base,speed_min,debug"
+        _res :
+            - !R.vars
+                BASE_DOMAIN     : "plato.lab.ayibang.cn"
+                WORKSPACE       : "/data/plato/work_space"
+                RECYCLE_SPACE   : "/data/plato/recycle_space"
+                GIT_BIN         : "/usr/local/git/bin/git"
+
+
+    - !R.env
+        _name    : "demo"
+        _mix     : "define,_safe2_deploy,_demo,_base,base,speed_min,debug"
+        _res     :
+            - !R.vars
+                BASE_DOMAIN     : "plato.demo.ayibang.cn"
+                WORKSPACE       : "/data/plato/work_space"
+                RECYCLE_SPACE   : "/data/plato/recycle_space"
+                GIT_BIN         : "/usr/local/git/bin/git"
+
+    - !R.env
+        _name    : "online"
+        _mix     : "define,_safe_deploy,_online,_base,base,speed_max,release"
+        _res :
+            - !R.vars
+                BASE_DOMAIN     : "plato.ayibang.cn"
+                WORKSPACE       : "/data/plato/work_space"
+                RECYCLE_SPACE   : "/data/plato/recycle_space"
+                GIT_BIN         : "/usr/local/git/bin/git"
+                PORT            : "8086"
+_sys:
+    -  !R.system
+        _name : "api"
+        _res  :
+            - !R.vars
+                DOMAIN   : "api.${BASE_DOMAIN}"
+            - !R.using
+                modul : "ayb_api"
+                args  : !R.vars
+                    API_ENTRY   : "${PRJ_ROOT}/src/sys_api"
+                    INCLUDE_PATH : "${PRJ_ROOT}/src:${PLATFORM_SDK}"
+
+
+    -  !R.system
+        _name : "test"
+        _res  :
+            - !R.vars
+                 PHP_INI : "${PRJ_ROOT}/conf/used/test_php.ini"
+            - !R.using
+                modul : "ayb_unit"
+                args  : !R.vars
+                    INCLUDE_PATH : "${PRJ_ROOT}/test:${PRJ_ROOT}/src"
+
+    # 管理后台
+    -  !R.system
+            _name : "admin"
+            _res  :
+                - !R.vars
+                    APP_SYS    : "admin"
+                    DOMAIN     : "admin.${BASE_DOMAIN}"
+                    ADMIN_PORT : "80"
+                    SOCK_FILE  : "${RUN_PATH}/fpm.sock"
+                    SRC_ROOT   : "${PRJ_ROOT}/src"
+
+                - !R.using
+                    path  : "/data/x/tools/rigger-ng/extends/moduls/pylon.yaml"
+                    modul : "pylon_web"
+                    args  : !R.vars
+                        MOD_TAG     : "admin"
+                        MOD_ENTRY   : "${PRJ_ROOT}/src/apps/admin"
+                        MOD_INCLUDE : "${PRJ_ROOT}/src/apps/admin:${BASE_INCLUDE}:${PRJ_ROOT}/src/web_inf"

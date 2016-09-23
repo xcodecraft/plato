@@ -1,0 +1,10 @@
+<phpunit bootstrap="bootstrap.php"
+         colors="true"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="money">
+            <file>cases/ProjectTest.php</file>
+            <file>cases/Scene2Test.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

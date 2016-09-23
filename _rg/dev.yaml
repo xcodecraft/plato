@@ -1,0 +1,8 @@
+_dev:
+    - !C.project
+        name : "plato"
+        root : "./"
+    - !C.version
+        file : "src/version.txt"
+    - !C.git
+        remote : "git@github.com:ayibang/plato.git"
